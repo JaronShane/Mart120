@@ -1,0 +1,125 @@
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/p5.min.js"></script>
+    <script src="sketch.js"></script>
+  </head>
+  <head>
+    <script>
+let player;
+let shapes = [];
+
+function setup() {
+  createCanvas(400, 400);
+  player = createPlayer(width / 2, height / 2, 20);
+}
+
+function draw() {
+  background(220);
+  line(1,1,500,1)
+  line(1,1,1,500)
+  line(1,399,399,399)
+  line(399,399,399,1)
+  textSize(32); 
+  fill(100); 
+  textAlign(400,400); 
+  text("Exit", 320,30);
+  player.display();
+  player.move();
+  moveShapes(); 
+  for (let shape of shapes) {
+    shape.display();
+  }
+}
+
+function createPlayer(x, y, size) {
+  let player = {
+    x: x,
+    y: y,
+    size: size,
+    display: function() {
+      fill(0);
+      ellipse(this.x, this.y, this.size, this.size);
+    },
+    move: function() {
+      if (keyIsDown(LEFT_ARROW)) {
+        this.x -= 5;
+      }
+      if (keyIsDown(RIGHT_ARROW)) {
+        this.x += 5;
+      }
+      if (keyIsDown(UP_ARROW)) {
+        this.y -= 5;
+      }
+      if (keyIsDown(DOWN_ARROW)) {
+        this.y += 5;
+      }
+    }
+  };
+  return player;
+}
+
+function mouseClicked() {
+  let shapeType = int(random(2));
+  if (shapeType === 0) {
+    let c = color(random(255), random(255), random(255));
+    let newShape = createCircle(mouseX, mouseY, random(10, 50), c);
+    shapes.push(newShape);
+  } else {
+    let c = color(random(255), random(255), random(255));
+    let newShape = createRectangle(mouseX, mouseY, random(10, 50), random(10, 50), c);
+    shapes.push(newShape);
+  }
+}
+
+function createCircle(x, y, diameter, color) {
+  let circle = {
+    x: x,
+    y: y,
+    diameter: diameter,
+    color: color,
+    display: function() {
+      fill(this.color);
+      ellipse(this.x, this.y, this.diameter, this.diameter);
+    }
+  };
+  return circle;
+}
+
+function createRectangle(x, y, width, height, color) {
+  let rectangle = {
+    x: x,
+    y: y,
+    width: width,
+    height: height,
+    color: color,
+    display: function() {
+      fill(this.color);
+      rectMode(CENTER);
+      rect(this.x, this.y, this.width, this.height);
+    }
+  };
+  return rectangle;
+}
+
+function moveShapes() {
+  for (let shape of shapes) {
+    shape.x += random(-5, 5);
+    shape.y += random(-5, 5);
+
+    if (shape.x < 0) {
+      shape.x = width;
+    }
+    if (shape.x > width) {
+      shape.x = 0;
+    }
+    if (shape.y < 0) {
+      shape.y = height;
+    }
+    if (shape.y > height) {
+      shape.y = 0;
+    }
+  }
+}
+</script>
+</head>
+</html>
